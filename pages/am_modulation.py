@@ -11,19 +11,19 @@ def AMModulationPage():
     carrier_f = 25
     carrier_a = 8
 
-    modulating_signal = modulating_a * np.sin(2 * np.pi * modulating_f * t)  # Modulating signal equation
+    modulating_signal = modulating_a * np.cos(2 * np.pi * modulating_f * t)  # Modulating signal equation
 
     # carrier wave signal
-    carrier_wave = carrier_a * np.sin(2 * np.pi * carrier_f * t)
+    carrier_wave = carrier_a * np.cos(2 * np.pi * carrier_f * t)
 
     # am signal
-    am_signal = carrier_wave + (modulating_a/2) * np.cos(2 * np.pi * (modulating_f + carrier_f) * t) - (modulating_a/2) * np.cos(2 * np.pi * (carrier_f - modulating_f  ) * t)
+    am_signal = carrier_wave + (modulating_a/2) * np.cos(2 * np.pi * (modulating_f + carrier_f) * t) + (modulating_a/2) * np.cos(2 * np.pi * (carrier_f - modulating_f  ) * t)
 
-    combined_plot = make_subplots(rows=3, cols=1, subplot_titles=("Carrier Wave", "Modulating Signal", "AM Modulated Signal"))
+    combined_plot = make_subplots(rows=3, cols=1, subplot_titles=("Carrier Wave", "Modulating Signal", "AM Modulated Signal"), shared_xaxes=True, vertical_spacing=0.04)
 
-    combined_plot.append_trace(go.Scatter(x=t, y=carrier_wave, mode='lines', ), row=1, col=1)
-    combined_plot.append_trace(go.Scatter(x=t, y=modulating_signal, mode='lines', ), row=2, col=1)
-    combined_plot.append_trace(go.Scatter(x=t, y=am_signal, mode='lines', ), row=3, col=1)
+    combined_plot.append_trace(go.Scatter(x=t, y=carrier_wave, mode='lines', name="Carrier Wave" ), row=1, col=1)
+    combined_plot.append_trace(go.Scatter(x=t, y=modulating_signal, mode='lines',name="Modulating Signal" ), row=2, col=1)
+    combined_plot.append_trace(go.Scatter(x=t, y=am_signal, mode='lines', name='AM Modulated Signal' ), row=3, col=1)
 
     combined_plot.update_layout(height=800)
 
@@ -35,14 +35,14 @@ def AMModulationPage():
            html.P("Carrier Wave:"),
         dcc.Markdown(r"""
         $$
-        c(t) = A_c \sin(2\pi f_c t)
+        c(t) = A_c \cos(2\pi f_c t)
         $$
         """, mathjax=True),
 
         html.P("Modulating Signal:"),
         dcc.Markdown(r"""
         $$
-        m(t) = A_m \sin(2\pi f_m t)
+        m(t) = A_m \cos(2\pi f_m t)
         $$
         """, mathjax=True),
 
@@ -50,12 +50,12 @@ def AMModulationPage():
         dcc.Markdown(r"""
         $$
         \begin{aligned}
-        s(t) &= [A_c + A_m \sin(2\pi f_m t)] \sin(2\pi f_c t) \\
-        &= A_c \left[1 + \frac{A_m}{A_c} \sin(2\pi f_m t)\right] \sin(2\pi f_c t) \\
-        &= A_c \left[1 + \mu \sin(2\pi f_m t)\right] \sin(2\pi f_c t) \\
-        &= A_c \sin(2\pi f_c t) + A_c \mu \sin(2\pi f_m t) \sin(2\pi f_c t) \\
-        &= A_c \sin(2\pi f_c t) + \frac{A_c \mu}{2} \left[ \cos(2\pi (f_c - f_m) t) - \cos(2\pi (f_c + f_m) t) \right]\\
-        &= A_c \sin(2\pi f_c t) + \frac{A_c \mu}{2} \cos(2\pi (f_c - f_m) t) - \frac{A_c \mu}{2} \cos(2\pi (f_c + f_m) t)
+        s(t) &= [A_c + A_m \cos(2\pi f_m t)] \cos(2\pi f_c t) \\
+        &= A_c \left[1 + \frac{A_m}{A_c} \cos(2\pi f_m t)\right] \cos(2\pi f_c t) \\
+        &= A_c \left[1 + \mu \cos(2\pi f_m t)\right] \cos(2\pi f_c t) \\
+        &= A_c \cos(2\pi f_c t) + A_c \mu \cos(2\pi f_m t) \cos(2\pi f_c t) \\
+        &= A_c \cos(2\pi f_c t) + \frac{A_c \mu}{2} \left[ \cos(2\pi (f_c - f_m) t) + \cos(2\pi (f_c + f_m) t) \right]\\
+        &= A_c \cos(2\pi f_c t) + \frac{A_c \mu}{2} \cos(2\pi (f_c - f_m) t) + \frac{A_c \mu}{2} \cos(2\pi (f_c + f_m) t)
         \end{aligned}
         $$
         """, mathjax=True, ),
@@ -76,12 +76,7 @@ def AMModulationPage():
             """,
             mathjax=True
         ),      
-        html.P("The last step uses the trigonometric identity:"),
-        dcc.Markdown(r"""
-        $$
-        \sin(A) \sin(B) = \frac{1}{2} [\cos(A-B) - \cos(A+B)]
-        $$
-        """, mathjax=True),
+       
 
         # Plot for Carrier Wave
         html.Div([
@@ -127,20 +122,27 @@ def update_plot(carrier_f, modulating_f, modulating_a, carrier_a):
     t = np.linspace(0, 1, 1000) # Time variable
 
     # Modulating signal equation
-    modulating_signal = modulating_a * np.sin(2 * np.pi * modulating_f * t)  
+    modulating_signal = modulating_a * np.cos(2 * np.pi * modulating_f * t)  
 
     # carrier wave signal
-    carrier_wave = carrier_a * np.sin(2 * np.pi * carrier_f * t)
+    carrier_wave = carrier_a * np.cos(2 * np.pi * carrier_f * t)
 
     # am signal
-    am_signal = carrier_wave + (modulating_a/2) * np.cos(2 * np.pi * (modulating_f + carrier_f) * t) - (modulating_a/2) * np.cos(2 * np.pi * (carrier_f - modulating_f  ) * t)
+    am_signal = carrier_wave + (modulating_a/2) * np.cos(2 * np.pi * (modulating_f + carrier_f) * t) + (modulating_a/2) * np.cos(2 * np.pi * (carrier_f - modulating_f  ) * t)
 
 
-    combined_plot = make_subplots(rows=3, cols=1, subplot_titles=("Carrier Wave", "Modulating Signal", "AM Modulated Signal"))
+    combined_plot = make_subplots(rows=3, cols=1, vertical_spacing=0.05)
 
-    combined_plot.append_trace(go.Scatter(x=t, y=carrier_wave, mode='lines', ), row=1, col=1)
-    combined_plot.append_trace(go.Scatter(x=t, y=modulating_signal, mode='lines', ), row=2, col=1)
-    combined_plot.append_trace(go.Scatter(x=t, y=am_signal, mode='lines', ), row=3, col=1)
+    combined_plot.append_trace(go.Scatter(x=t, y=carrier_wave, mode='lines', name="Carrier Wave" ), row=1, col=1)
+    combined_plot.append_trace(go.Scatter(x=t, y=modulating_signal, mode='lines',name="Modulating Signal" ), row=2, col=1)
+    combined_plot.append_trace(go.Scatter(x=t, y=am_signal, mode='lines', name='AM Modulated Signal' ), row=3, col=1)
+
+    combined_plot.update_yaxes(title_text="Amplitude", row=1, col=1)
+    combined_plot.update_yaxes(title_text="Amplitude", row=2, col=1)
+    combined_plot.update_yaxes(title_text="Amplitude", row=3, col=1)
+
+ 
+    combined_plot.update_xaxes(title_text="time", row=3, col=1)
 
     combined_plot.update_layout(height=800)
 
