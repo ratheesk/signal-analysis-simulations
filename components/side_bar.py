@@ -17,50 +17,43 @@ SIDEBAR_STYLE = {
 NAV_LINK_STYLE = {
     "color": "white",
     "fontSize": "14px",
-    "text-align":'start',
+    "text-align": "start",
     "padding": "10px",
     "borderRadius": "8px",
     "transition": "0.3s",
 }
 
-NAV_LINK_HOVER = {
-    "color": "white",
-    "backgroundColor": "#495057",
-}
+NAV_ITEMS = [
+    ("Home", "/"),
+    ("AM Modulation", "/am-modulation"),
+    ("Modulation Effects", "/am-modulation-effect"),
+    ("Frequency Spectrum", "/am-frequency-spectrum"),
+]
 
 # Sidebar component
-SideBar = html.Div([
-    html.Div([
-        html.H3("📡 Signals Simulation", className="text-center"),
-        html.Hr(style={"borderColor": "white"}),
-
-        html.P("By Rathees", className="lead text-center"),
-
-        dbc.Nav(
+SideBar = html.Div(
+    [
+        html.Div(
             [
-                dbc.NavLink("Home",
-                    href="/", active="exact", style=NAV_LINK_STYLE
+                html.H3("📡 Signals Simulation", className="text-center"),
+                html.Hr(style={"borderColor": "white"}),
+                html.P("By Rathees", className="lead text-center"),
+                
+                dbc.Nav(
+                    [dbc.NavLink(text, href=link, active="exact", style=NAV_LINK_STYLE) for text, link in NAV_ITEMS],
+                    vertical=True,
+                    pills=True,
                 ),
-                dbc.NavLink("AM Modulation", 
-                    href="/am-modulation", active="exact", style=NAV_LINK_STYLE
-                ),
-                dbc.NavLink("Modulation Effects", 
-                    href="/am-modulation-effect", active="exact", style=NAV_LINK_STYLE
-                ),
-                dbc.NavLink("Frequency Spectrum", 
-                    href="/am-frequency-spectrum", active="exact", style=NAV_LINK_STYLE
+                
+                html.Br(),
+                html.Div(
+                    "⚡ Explore signal processing like never before!", 
+                    className="text-center",
+                    style={"fontSize": "14px", "opacity": "0.8"}
                 ),
             ],
-            vertical=True,
-            pills=True,
-        ),
-
-        html.Br(),
-
-        html.Div(
-            "⚡ Explore signal processing like never before!", 
-            className="text-center",
-            style={"fontSize": "14px", "opacity": "0.8"}
+            style={"textAlign": "center"},
         )
-    ], style={"textAlign": "center"})
-], style=SIDEBAR_STYLE)
+    ],
+    style=SIDEBAR_STYLE,
+)

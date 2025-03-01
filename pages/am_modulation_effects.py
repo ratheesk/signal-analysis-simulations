@@ -1,6 +1,6 @@
 import numpy as np
 import plotly.graph_objs as go
-from dash import html, dcc, Dash
+from dash import html, dcc
 from dash.dependencies import Input, Output
 
 def AMModulationEffectsPage():
@@ -67,7 +67,7 @@ def update_plot(modulation_index):
     fig.add_trace(go.Scatter(x=t, y=am_signal, mode='lines', name='AM Modulated Signal'))
     fig.add_trace(go.Scatter(x=t, y=envelope_upper, mode='lines', name='Upper Envelope', line=dict(dash='dash')))
     fig.add_trace(go.Scatter(x=t, y=envelope_lower, mode='lines', name='Lower Envelope', line=dict(dash='dash')))
-    fig.update_layout(title='AM Modulation Effect', xaxis_title='Time (s)', yaxis_title='Amplitude', height=500)
+    fig.update_layout(title='AM Modulation Effect', xaxis_title='Time (s)', yaxis_title='Amplitude', height=500, template="plotly_dark")
     return fig
 
 def am_modulation_effects_callback(app):

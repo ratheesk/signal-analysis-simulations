@@ -2,37 +2,16 @@ import numpy as np
 import plotly.graph_objs as go
 from dash import html, dcc
 from plotly.subplots import make_subplots
+from dash.dependencies import Input, Output
 
 def AMModulationPage():
-    # Generate data for the modulating signal (low frequency)
-    t = np.linspace(0, 1, 1000) # Time variable
-    modulating_f = 3  # Default Modulating signal frequency
-    modulating_a = 4
-    carrier_f = 25
-    carrier_a = 8
-
-    modulating_signal = modulating_a * np.cos(2 * np.pi * modulating_f * t)  # Modulating signal equation
-
-    # carrier wave signal
-    carrier_wave = carrier_a * np.cos(2 * np.pi * carrier_f * t)
-
-    # am signal
-    am_signal = carrier_wave + (modulating_a/2) * np.cos(2 * np.pi * (modulating_f + carrier_f) * t) + (modulating_a/2) * np.cos(2 * np.pi * (carrier_f - modulating_f  ) * t)
-
-    combined_plot = make_subplots(rows=3, cols=1, subplot_titles=("Carrier Wave", "Modulating Signal", "AM Modulated Signal"), shared_xaxes=True, vertical_spacing=0.04)
-
-    combined_plot.append_trace(go.Scatter(x=t, y=carrier_wave, mode='lines', name="Carrier Wave" ), row=1, col=1)
-    combined_plot.append_trace(go.Scatter(x=t, y=modulating_signal, mode='lines',name="Modulating Signal" ), row=2, col=1)
-    combined_plot.append_trace(go.Scatter(x=t, y=am_signal, mode='lines', name='AM Modulated Signal' ), row=3, col=1)
-
-    combined_plot.update_layout(height=800)
 
     # Return the chapter content along with the three plots and sliders
     return html.Div([
         html.H3("Amplitude Modulation"),
         html.P("Mathematical expressions for the signals:"),
         
-           html.P("Carrier Wave:"),
+        html.P("Carrier Wave:"),
         dcc.Markdown(r"""
         $$
         c(t) = A_c \cos(2\pi f_c t)
@@ -113,7 +92,7 @@ def AMModulationPage():
                 value=4, 
                 tooltip={"placement": "bottom", "always_visible": True},
             ),
-            dcc.Graph(id='combined-signal-plot', figure=combined_plot)
+            dcc.Graph(id='combined-signal-plot')
         ]),
     ])
 
@@ -142,10 +121,21 @@ def update_plot(carrier_f, modulating_f, modulating_a, carrier_a):
     combined_plot.update_yaxes(title_text="Amplitude", row=3, col=1)
 
  
-    combined_plot.update_xaxes(title_text="time", row=3, col=1)
+    combined_plot.update_xaxes(title_text="Time (s)", row=3, col=1)
 
-    combined_plot.update_layout(height=800)
+    combined_plot.update_layout(height=800, template="plotly_dark")
 
 
     return  combined_plot
+
+def am_modulation_callback(app):
+    @app.callback(
+        Output('combined-signal-plot', 'figure'),
+        [Input('carrier-frequency-slider', 'value'),
+        Input('carrier-amplitude-slider', 'value'),
+        Input('modulating-frequency-slider', 'value'),
+        Input('modulating-amplitude-slider', 'value')]
+    )
+    def update_output(carrier_f, carrier_a, modulating_f, modulating_a ):
+        return update_plot(carrier_f, modulating_f, modulating_a, carrier_a)
 

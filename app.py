@@ -5,7 +5,7 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 
 from components.side_bar import SideBar
-from pages.am_modulation import AMModulationPage, update_plot 
+from pages.am_modulation import AMModulationPage, am_modulation_callback 
 from pages.home import HomePage
 from pages.am_modulation_effects import am_modulation_effects_callback, AMModulationEffectsPage
 from pages.am_frequncy_spectrum import AMFrequencySpectrumPage, am_frequency_spectrum_callback
@@ -58,16 +58,7 @@ def display_page(pathname):
         return html.Div([html.H2("Page not found")])
 
 # Update the output graphs when sliders are changed
-@app.callback(
-    Output('combined-signal-plot', 'figure'),
-    [Input('carrier-frequency-slider', 'value'),
-     Input('carrier-amplitude-slider', 'value'),
-     Input('modulating-frequency-slider', 'value'),
-     Input('modulating-amplitude-slider', 'value')]
-)
-def update_output(carrier_f, carrier_a, modulating_f, modulating_a ):
-    return update_plot(carrier_f, modulating_f, modulating_a, carrier_a)
-
+am_modulation_callback(app)
 am_modulation_effects_callback(app)
 am_frequency_spectrum_callback(app)
 
