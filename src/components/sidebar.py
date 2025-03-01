@@ -150,6 +150,21 @@ def Sidebar():
                         "⚡ Explore signal processing like never before!",
                         style={"fontSize": "13px", "opacity": "0.8", "textAlign": "center"}
                     ),
+                     html.Div(
+                                [
+                                    html.A(
+                                        html.I(className="fab fa-github fa-lg"),
+                                        href="https://github.com/ratheesk/signal-analysis-simulations",
+                                        className="text-white mx-2",
+                                    ),
+                                    html.A(
+                                        html.I(className="fab fa-linkedin fa-lg"),
+                                        href="https://www.linkedin.com/in/ratheesk/",
+                                        className="text-white mx-2",
+                                    ),
+                                ],
+                                className="d-flex justify-content-center mt-2"
+                            ),
                 ],
                 style={"marginTop": "auto"}
             )
