@@ -63,6 +63,7 @@ NAV_ITEMS = [
             {"label": "Overview", "href": "/am-modulation"},
             {"label": "Modulation Effects", "href": "/am-modulation-effect"},
             {"label": "Frequency Spectrum", "href": "/am-frequency-spectrum"},
+            {"label": "DSB-SC", "href": "/am-double-sideband-suppressed-carrier"},
         ]
     },
     

@@ -12,10 +12,13 @@ from pages import HomePage
 from pages.am_modulation import (
     AMFrequencySpectrumPage, 
     AMModulationEffectsPage, 
-    AMModulationPage, 
+    AMModulationPage,
+    AMDSBSCPage, 
     am_frequency_spectrum_callback, 
     am_modulation_effects_callback, 
-    am_modulation_callback
+    am_modulation_callback,
+    am_dsb_sc_callback
+
 )
 
 # Initialize the Dash app with Font Awesome for icons
@@ -155,6 +158,8 @@ def display_page(pathname):
         return AMModulationEffectsPage()  
     elif pathname == '/am-frequency-spectrum':
         return AMFrequencySpectrumPage()  
+    elif pathname == '/am-double-sideband-suppressed-carrier':
+        return AMDSBSCPage()  
     else:
         return html.Div([html.H2("Page not found")])
 
@@ -174,6 +179,7 @@ for item in ['am-modulation', 'fm-modulation']:
 am_modulation_callback(app)
 am_modulation_effects_callback(app)
 am_frequency_spectrum_callback(app)
+am_dsb_sc_callback(app)
 
 if __name__ == '__main__':
     app.run_server(debug=True, port=8050)

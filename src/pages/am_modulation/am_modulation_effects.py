@@ -52,12 +52,23 @@ def update_plot(modulation_index):
     modulating_f = 3             # Modulating signal frequency
     carrier_f = 25               # Carrier frequency
     carrier_a = 8                # Carrier amplitude
-    modulating_a = carrier_a * modulation_index
+    modulating_a = 3
+
+        # Modulating signal equation
+    modulating_signal = modulating_a * np.cos(2 * np.pi * modulating_f * t)  
+
+    # carrier wave signal
+    carrier_wave = carrier_a * np.cos(2 * np.pi * carrier_f * t)
+
+    # amplitude sensitivity
+    amp_sens = 0.3
+
 
     # AM signal using cosines
-    am_signal = (carrier_a * np.cos(2 * np.pi * carrier_f * t) +
-                 (modulating_a / 2) * np.cos(2 * np.pi * (modulating_f + carrier_f) * t) +
-                 (modulating_a / 2) * np.cos(2 * np.pi * (carrier_f - modulating_f) * t))
+    # am_signal = (carrier_a * np.cos(2 * np.pi * carrier_f * t) +
+    #              (modulating_a / 2) * np.cos(2 * np.pi * (modulating_f + carrier_f) * t) +
+    #              (modulating_a / 2) * np.cos(2 * np.pi * (carrier_f - modulating_f) * t))
+    am_signal = (1 + amp_sens * modulating_signal) * carrier_wave
     
     # Envelope
     envelope_upper = carrier_a * (1 + modulation_index * np.cos(2 * np.pi * modulating_f * t))
