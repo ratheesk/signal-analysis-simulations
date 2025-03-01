@@ -3,6 +3,8 @@ import plotly.graph_objs as go
 from dash import html, dcc
 from dash.dependencies import Input, Output
 from scipy.fftpack import fft, fftfreq
+import dash_bootstrap_components as dbc
+
 
 def AMFrequencySpectrumPage():
     return html.Div([
@@ -25,19 +27,20 @@ def AMFrequencySpectrumPage():
         html.P("Amplitude Modulated Signal:"),
         dcc.Markdown(r"""
         $$
-        s(t) = A_c \cos(2\pi f_c t) + \frac{A_m}{2} \cos(2\pi (f_c - f_m) t) + \frac{A_m }{2} \cos(2\pi (f_c + f_m) t)
+        s(t) = A_c \cos(2\pi f_c t) + \frac{A_c k_a A_m}{2} \cos(2\pi (f_c - f_m) t) + \frac{A_c k_a A_m}{2} \cos(2\pi (f_c + f_m) t)
         $$
         """, mathjax=True),
 
         html.P("Frequency Spectrum:"),
           dcc.Markdown(r"""
         $$
-        S(f) = \frac{A_c}{2} \left[ \delta(f - f_c) + \delta(f + f_c) \right] + \frac{A_m}{4} \left[ \delta(f - (f_c - f_m)) + \delta(f + (f_c - f_m)) \right] + \frac{A_m}{4} \left[ \delta(f - (f_c+ f_m)) + \delta(f + (f_c + f_m)) \right] 
+        S(f) = \frac{A_c}{2} \left[ \delta(f - f_c) + \delta(f + f_c) \right] + \frac{A_c k_a A_m}{4} \left[ \delta(f - (f_c - f_m)) + \delta(f + (f_c - f_m)) \right] + \frac{A_c k_a A_m}{4} \left[ \delta(f - (f_c+ f_m)) + \delta(f + (f_c + f_m)) \right] 
         $$
         """, mathjax=True),
+
+        html.H4("Adjust AM Parameters", className="mt-5 py-3"),
         
-        html.Div([
-            html.H4("Adjust AM Parameters"),
+        dbc.Card([
             html.H6("Carrier Frequency (Hz)"),
             dcc.Slider(
                 id='carrier-frequency-slider-freq',
@@ -62,16 +65,15 @@ def AMFrequencySpectrumPage():
                 min=1, max=10, value=4,
                 tooltip={"placement": "bottom", "always_visible": True}
             ),
-        ]),
-
-        # Time-domain & Frequency-domain plots
-        html.Div([
+             html.H6("Amplitude Sensitivity"),
+            dcc.Slider(id='amplitude-sensitivity-slider', min=0, max=2, value=0.2, tooltip={"placement": "bottom", "always_visible": True}),
             dcc.Graph(id='am-signal-time-domain'),
             dcc.Graph(id='am-signal-frequency-domain'),
-        ]),
+        ], className='p-3 mt-3'),
+
     ])
 
-def compute_am_signal(carrier_f, modulating_f, modulating_a, carrier_a):
+def compute_am_signal(carrier_f, modulating_f, modulating_a, carrier_a, amp_sens):
     """Generate AM signal and compute its Fourier Transform with correct scaling."""
     fs = 1000  # Sampling rate (Hz)
     T = 1.0    # Signal duration (sec)
@@ -81,8 +83,9 @@ def compute_am_signal(carrier_f, modulating_f, modulating_a, carrier_a):
 
 
     # AM Modulated Signal
+    modulating_signal = modulating_a * np.cos(2 * np.pi * modulating_f * t)  
     carrier_wave = carrier_a * np.cos(2 * np.pi * carrier_f * t)
-    am_signal = carrier_wave + (modulating_a/2) * np.cos(2 * np.pi * (modulating_f + carrier_f) * t) + (modulating_a/2) * np.cos(2 * np.pi * (carrier_f - modulating_f) * t)
+    am_signal = (1 + (amp_sens * modulating_signal)) * carrier_wave
 
     # Compute Fourier Transform (Correct Scaling)
     fft_values = fft(am_signal) / N  # Normalize by number of samples
@@ -98,10 +101,11 @@ def am_frequency_spectrum_callback(app):
         [Input('carrier-frequency-slider-freq', 'value'),
          Input('carrier-amplitude-slider-freq', 'value'),
          Input('modulating-frequency-slider-freq', 'value'),
-         Input('modulating-amplitude-slider-freq', 'value')]
+         Input('modulating-amplitude-slider-freq', 'value'),
+         Input('amplitude-sensitivity-slider', 'value')]
     )
-    def update_am_spectrum(carrier_f, carrier_a, modulating_f, modulating_a):
-        t, am_signal, freqs, fft_amplitude = compute_am_signal(carrier_f, modulating_f, modulating_a, carrier_a)
+    def update_am_spectrum(carrier_f, carrier_a, modulating_f, modulating_a, amp_sens):
+        t, am_signal, freqs, fft_amplitude = compute_am_signal(carrier_f, modulating_f, modulating_a, carrier_a, amp_sens)
 
         # Time-domain plot
         time_plot = go.Figure()

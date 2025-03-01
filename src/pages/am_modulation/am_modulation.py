@@ -52,7 +52,7 @@ def AMModulationPage():
         $$
         """, mathjax=True),      
 
-        html.H4("Simulate AM Modulation"),
+        html.H4("Simulate AM Modulation", className="mt-5 py-3"),
 
         dbc.Card([
             html.H6("Carrier Signal Frequency"),

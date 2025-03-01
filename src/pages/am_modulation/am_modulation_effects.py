@@ -49,7 +49,7 @@ def AMModulationEffectsPage():
         $$
         """, mathjax=True),
 
-        html.H4("Adjust Modulation Percentage (0% - 200%)"),
+        html.H4("Adjust Modulation Percentage" , className="mt-5 py-3"),
 
 
         dbc.Card([
