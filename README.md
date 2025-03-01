@@ -1,19 +1,26 @@
-# Wave Modulation Flask Web App
+# Signal Analysis Simulations
 
-This is a simple Flask web app to interactively learn about **Continuous Wave Modulation** and **Pulse Modulation**, along with various sub-chapters related to these topics.
+[![License](https://img.shields.io/github/license/ratheesk/signal-analysis-simulations.svg)](https://github.com/ratheesk/signal-analysis-simulations/blob/master/LICENSE)
+
+This is an interactive web app to explore about signal analysis and simulation., along with various sub-chapters related to these topics. The app is developed using **Dash**.
 
 ## Project Setup
 
 ### Prerequisites
 
-Make sure you have **Conda** installed on your system. You can download Conda from the official site: [Conda Installation](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html).
+Ensure that you have **Python** installed on your system. Optionally, you can use **Conda** for managing environments.
+
+- **Python**: [Download Python](https://www.python.org/downloads/)
+- **Conda (optional)**: [Conda Installation](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
 
 ### Steps to Set Up the Project
+
+#### Option 1: Using Conda (Optional)
 
 1. **Clone the repository**:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/ratheesk/signal-analysis-simulations.git
    cd wave-modulation
    ```
 
@@ -31,26 +38,74 @@ Make sure you have **Conda** installed on your system. You can download Conda fr
    conda activate wave-modulation
    ```
 
-4. **Run the Flask app**:
-   After setting up the environment, you can run the Flask app with the following command:
+4. **Run the Dash app**:
+   The app is located inside the `src` folder. Navigate to that folder and then run the app using the following command:
 
    ```bash
+   cd src
    python app.py
    ```
 
-5. **Access the app**:
+#### Option 2: Using Virtualenv (If not using Conda)
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/ratheesk/signal-analysis-simulations.git
+   cd wave-modulation
+   ```
+
+2. **Create a virtual environment**:
+   Create a new virtual environment using `virtualenv` or `venv` (for Python 3.3+):
+
+   ```bash
+   python -m venv venv
+   ```
+
+3. **Activate the virtual environment**:
+
+   - On Windows:
+
+     ```bash
+     venv\Scripts\activate
+     ```
+
+   - On macOS/Linux:
+
+     ```bash
+     source venv/bin/activate
+     ```
+
+4. **Install dependencies**:
+   Install the required packages using `pip`:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. **Run the Dash app**:
+   The app is located inside the `src` folder. Navigate to that folder and then run the app using the following command:
+
+   ```bash
+   cd src
+   python app.py
+   ```
+
+6. **Access the app**:
    Open your browser and go to `http://127.0.0.1:8050/` to interact with the app.
 
 ### Development
 
-1. Export the environment to environment.yml: After installing the required packages, you can export the environment configuration into an environment.yml file to share or replicate the environment.
+1. **Export the environment to environment.yml** (Conda users): After installing new packages or updating dependencies, export the environment configuration into an `environment.yml` file to share or replicate the environment.
 
    ```bash
    conda env export > environment.yml
    ```
 
-2. Create a requirements.txt file: Once the necessary packages are installed, generate a requirements.txt file:
+2. **Update the `requirements.txt` file**: If you install additional packages using `pip` or update the environment, generate an updated `requirements.txt` file for Python virtual environments:
 
    ```bash
    pip freeze > requirements.txt
    ```
+
+3. **Adding New Packages**: If you add any new dependencies to the project, remember to update both the `environment.yml` file (for Conda users) and the `requirements.txt` file (for `pip` users) to ensure proper environment reproduction.

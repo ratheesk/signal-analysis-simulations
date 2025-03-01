@@ -4,11 +4,9 @@ from dash import dcc, html
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 
-from components.side_bar import SideBar
-from pages.am_modulation import AMModulationPage, am_modulation_callback 
-from pages.home import HomePage
-from pages.am_modulation_effects import am_modulation_effects_callback, AMModulationEffectsPage
-from pages.am_frequncy_spectrum import AMFrequencySpectrumPage, am_frequency_spectrum_callback
+from components import SideBar
+from pages import HomePage
+from pages.am_modulation import AMFrequencySpectrumPage, AMModulationEffectsPage, AMModulationPage, am_frequency_spectrum_callback, am_modulation_effects_callback, am_modulation_callback
 
 # Initialize the Dash app
 app = dash.Dash(__name__, 

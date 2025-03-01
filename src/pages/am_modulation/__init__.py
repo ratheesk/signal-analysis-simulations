@@ -1,0 +1,3 @@
+from .am_frequncy_spectrum import AMFrequencySpectrumPage, am_frequency_spectrum_callback
+from .am_modulation import AMModulationPage, am_modulation_callback
+from .am_modulation_effects import AMModulationEffectsPage, am_modulation_effects_callback
